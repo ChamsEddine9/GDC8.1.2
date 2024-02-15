@@ -2,8 +2,8 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
-#les route CRUD dossier
-# Routes pour l'entité Dossier
+
+# Routes pour l'entité Dossier CRUD dossier
 
 api_dossier_list:
   path: /api/dossiers
@@ -30,3 +30,29 @@ api_dossier_delete:
   methods: DELETE
   controller: App\Controller\DossierController::deleteDossier
 
+# Routes pour l'entité Prime CRUD prime
+
+api_prime_list:
+  path: /api/primes
+  methods: GET
+  controller: App\Controller\PrimeController::listPrimes
+
+api_prime_get:
+  path: /api/primes/{id}
+  methods: GET
+  controller: App\Controller\PrimeController::getPrime
+
+api_prime_create:
+  path: /api/primes
+  methods: POST
+  controller: App\Controller\PrimeController::createPrime
+
+api_prime_update:
+  path: /api/primes/{id}
+  methods: PUT
+  controller: App\Controller\PrimeController::updatePrime
+
+api_prime_delete:
+  path: /api/primes/{id}
+  methods: DELETE
+  controller: App\Controller\PrimeController::deletePrime
