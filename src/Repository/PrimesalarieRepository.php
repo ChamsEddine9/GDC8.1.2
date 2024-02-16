@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Primesalarie;
+use App\Entity\PrimeSalarie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

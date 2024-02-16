@@ -7,6 +7,7 @@ use App\Entity\Salarie;
 use App\Entity\PrimeSalarie;
 use App\Repository\PrimeRepository;
 use App\Repository\SalarieRepository;
+use App\Repository\PrimesalarieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class SalarieController extends AbstractController
 {
     private $salarieRepository;
+    private $primesalarieRepository;
     private $primeRepository;
     private $serializer;
     private $validator;
@@ -30,13 +32,15 @@ class SalarieController extends AbstractController
         PrimeRepository $primeRepository,
         SerializerInterface $serializer,
         ValidatorInterface $validator,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        primesalarieRepository $primesalarieRepository
     ) {
         $this->salarieRepository = $salarieRepository;
         $this->primeRepository = $primeRepository;
         $this->serializer = $serializer;
         $this->validator = $validator;
         $this->entityManager = $entityManager;
+        $this->primesalarieRepository = $primesalarieRepository;
     }
 
     #[Route('', methods: ['GET'], name: 'list_salaries')]
@@ -48,15 +52,47 @@ class SalarieController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['GET'], name: 'get_salarie')]
-    public function getSalarie(int $id): JsonResponse
+public function getSalarie(int $id): JsonResponse
+{
+    $salarie = $this->salarieRepository->find($id);
+    if (!$salarie) {
+        return new JsonResponse(['error' => 'Salarie introuvable pour l\'ID ' . $id], Response::HTTP_NOT_FOUND);
+    }
+    $salarieData = $this->serializer->serialize($salarie,'json');
+    return new JsonResponse($salarieData, Response::HTTP_OK, [], true);
+}
+
+    
+    #[Route('/{id}/primes', methods: ['GET'], name: 'getprimesalarie')]
+    public function getPrimeSalarie(int $id): JsonResponse
     {
         $salarie = $this->salarieRepository->find($id);
         if (!$salarie) {
             return new JsonResponse(['error' => 'Salarie introuvable'], Response::HTTP_NOT_FOUND);
         }
-        $data = $this->serializer->serialize($salarie, 'json');
-        return new JsonResponse($data, Response::HTTP_OK, [], true);
+
+        // Chargez les primes associées à ce salarié
+        $primesAssociees = $this->primesalarieRepository->findBy(['salarie' => $salarie]);
+
+        // Ajoutez les primes et montants au tableau des données du salarié
+        $primesData = [];
+        foreach ($primesAssociees as $primeAssociee) {
+            $prime = $primeAssociee->getPrime();
+            if ($prime) {
+                $primesData[] = [
+                    'prime_id' => $prime->getId(),
+                    'prime_nom' => $prime->getNom(),
+                    'montant' => $primeAssociee->getMontant(),
+                ];
+            }
+        }
+
+        return new JsonResponse(['primes' => $primesData], Response::HTTP_OK);
     }
+
+        
+
+//return $this->json($salarieData, Response::HTTP_OK, [], ['json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS]);
 
     #[Route('', methods: ['POST'], name: 'create_salarie')]
     public function createSalarie(Request $request): JsonResponse

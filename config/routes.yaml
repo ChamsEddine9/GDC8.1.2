@@ -75,6 +75,12 @@ api_salarie_get:
   methods: GET
   controller: App\Controller\SalarieController::getSalarie
 
+api_salarie_prime_get:
+  path: /api/salaries/{id}/prime
+  methods: GET
+  controller: App\Controller\SalarieController::getprimesalarie
+
+
 api_salarie_update:
   path: /api/salaries/{id}
   methods: PUT
