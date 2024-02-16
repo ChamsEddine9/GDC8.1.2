@@ -6,24 +6,18 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity(repositoryClass: SalarieRepository::class)]
 class Salarie
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $nom;
+    #[ORM\Column(length: 255)]
+    private ?string $nom = null;
 
-    // Ajoutez d'autres propriétés selon les besoins
+    // Ajoutez d'autres propriétés de salarié selon vos besoins
 
     public function getId(): ?int
     {
@@ -35,12 +29,12 @@ class Salarie
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    public function setNom(string $nom): static
     {
         $this->nom = $nom;
 
         return $this;
     }
 
-    // Ajoutez d'autres getters et setters selon les besoins
+    // Ajoutez d'autres getters et setters selon vos besoins
 }

@@ -56,3 +56,32 @@ api_prime_delete:
   path: /api/primes/{id}
   methods: DELETE
   controller: App\Controller\PrimeController::deletePrime
+
+
+  # Routes pour l'entité Salarie CRUD salarie
+
+api_salarie_create:
+  path: /api/salaries
+  methods: POST
+  controller: App\Controller\SalarieController::createSalarie
+
+api_salarie_list:
+  path: /api/salaries
+  methods: GET
+  controller: App\Controller\SalarieController::listSalaries
+
+api_salarie_get:
+  path: /api/salaries/{id}
+  methods: GET
+  controller: App\Controller\SalarieController::getSalarie
+
+api_salarie_update:
+  path: /api/salaries/{id}
+  methods: PUT
+  controller: App\Controller\SalarieController::updateSalarie
+
+api_salarie_delete:
+  path: /api/salaries/{id}
+  methods: DELETE
+  controller: App\Controller\SalarieController::deleteSalarie
+
